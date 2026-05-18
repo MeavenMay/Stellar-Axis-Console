@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import {
   Activity,
   CreditCard,
@@ -9,8 +11,18 @@ import {
   ArrowUpRight,
   ShieldCheck
 } from 'lucide-react';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 export default function Dashboard() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
@@ -56,6 +68,7 @@ export default function Dashboard() {
             trend="+12% this week"
             icon={<Zap className="text-indigo-400" />}
             bgIcon={<Zap className="text-indigo-400" size={48} />}
+            isLoading={isLoading}
           />
           <StatCard
             title="Active Smart Accounts"
@@ -63,6 +76,7 @@ export default function Dashboard() {
             trend="+84 new today"
             icon={<ShieldCheck className="text-teal-400" />}
             bgIcon={<ShieldCheck className="text-teal-400" size={48} />}
+            isLoading={isLoading}
           />
           <StatCard
             title="Relayer Health"
@@ -70,6 +84,7 @@ export default function Dashboard() {
             trend="Operational"
             icon={<Activity className="text-emerald-400" />}
             bgIcon={<Activity className="text-emerald-400" size={48} />}
+            isLoading={isLoading}
           />
         </div>
 
@@ -91,9 +106,19 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
-                <TableRow account="G...4k2" action="Swap USDC/XLM" status="Success" fee="0.01 XLM" time="2m ago" />
-                <TableRow account="G...9m1" action="Stake NEXUS" status="Success" fee="0.05 XLM" time="15m ago" />
-                <TableRow account="G...8v2" action="Mint NFT" status="Processing" fee="0.10 XLM" time="Just now" />
+                {isLoading ? (
+                  <>
+                    <TableRow isLoading={true} />
+                    <TableRow isLoading={true} />
+                    <TableRow isLoading={true} />
+                  </>
+                ) : (
+                  <>
+                    <TableRow account="G...4k2" action="Swap USDC/XLM" status="Success" fee="0.01 XLM" time="2m ago" />
+                    <TableRow account="G...9m1" action="Stake NEXUS" status="Success" fee="0.05 XLM" time="15m ago" />
+                    <TableRow account="G...8v2" action="Mint NFT" status="Processing" fee="0.10 XLM" time="Just now" />
+                  </>
+                )}
               </tbody>
             </table>
           </div>
@@ -114,7 +139,21 @@ function NavItem({ icon, label, active = false }: { icon: React.ReactNode, label
   );
 }
 
-function StatCard({ title, value, trend, icon, bgIcon }: { title: string, value: string, trend: string, icon: React.ReactNode, bgIcon: React.ReactNode }) {
+function StatCard({
+  title,
+  value,
+  trend,
+  icon,
+  bgIcon,
+  isLoading = false
+}: {
+  title: string;
+  value: string;
+  trend: string;
+  icon: React.ReactNode;
+  bgIcon: React.ReactNode;
+  isLoading?: boolean;
+}) {
   return (
     <div className="bg-[#1C1C1E] p-6 rounded-3xl border border-white/5 relative overflow-hidden group">
       <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -126,13 +165,58 @@ function StatCard({ title, value, trend, icon, bgIcon }: { title: string, value:
         </div>
         <span className="text-zinc-400 font-medium text-sm">{title}</span>
       </div>
-      <div className="text-3xl font-outfit font-bold text-white mb-1">{value}</div>
-      <div className="text-sm text-zinc-500">{trend}</div>
+      {isLoading ? (
+        <div className="space-y-3">
+          <Skeleton className="w-32 h-9" />
+          <Skeleton className="w-24 h-4" />
+        </div>
+      ) : (
+        <>
+          <div className="text-3xl font-outfit font-bold text-white mb-1">{value}</div>
+          <div className="text-sm text-zinc-500">{trend}</div>
+        </>
+      )}
     </div>
   );
 }
 
-function TableRow({ account, action, status, fee, time }: { account: string, action: string, status: string, fee: string, time: string }) {
+function TableRow({
+  account,
+  action,
+  status,
+  fee,
+  time,
+  isLoading = false
+}: {
+  account?: string;
+  action?: string;
+  status?: string;
+  fee?: string;
+  time?: string;
+  isLoading?: boolean;
+}) {
+  if (isLoading) {
+    return (
+      <tr className="hover:bg-white/[0.02] transition-colors">
+        <td className="px-6 py-4">
+          <Skeleton className="w-16 h-4" />
+        </td>
+        <td className="px-6 py-4">
+          <Skeleton className="w-32 h-4" />
+        </td>
+        <td className="px-6 py-4">
+          <Skeleton className="w-20 h-6 rounded-full" />
+        </td>
+        <td className="px-6 py-4">
+          <Skeleton className="w-16 h-4" />
+        </td>
+        <td className="px-6 py-4 text-right">
+          <Skeleton className="w-12 h-4 ml-auto" />
+        </td>
+      </tr>
+    );
+  }
+
   return (
     <tr className="hover:bg-white/[0.02] transition-colors group">
       <td className="px-6 py-4 font-mono text-zinc-300">{account}</td>
@@ -151,3 +235,4 @@ function TableRow({ account, action, status, fee, time }: { account: string, act
     </tr>
   );
 }
+
