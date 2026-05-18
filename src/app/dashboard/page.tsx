@@ -1,4 +1,5 @@
 import React from 'react';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import {
   Activity,
   CreditCard,
@@ -38,66 +39,68 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto bg-[#0B0B0E] p-8">
-        <header className="flex justify-between items-center mb-12">
-          <div>
-            <h1 className="text-3xl font-outfit font-bold text-white mb-2">Developer Overview</h1>
-            <p className="text-zinc-400">Welcome back, Axis Guardian.</p>
-          </div>
-          <button className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl font-medium transition-all shadow-lg shadow-indigo-500/20 flex items-center gap-2">
-            New Project <ArrowUpRight size={18} />
-          </button>
-        </header>
+        <ErrorBoundary>
+          <header className="flex justify-between items-center mb-12">
+            <div>
+              <h1 className="text-3xl font-outfit font-bold text-white mb-2">Developer Overview</h1>
+              <p className="text-zinc-400">Welcome back, Axis Guardian.</p>
+            </div>
+            <button className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl font-medium transition-all shadow-lg shadow-indigo-500/20 flex items-center gap-2">
+              New Project <ArrowUpRight size={18} />
+            </button>
+          </header>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <StatCard
-            title="Total Sponsored"
-            value="14,285 XLM"
-            trend="+12% this week"
-            icon={<Zap className="text-indigo-400" />}
-            bgIcon={<Zap className="text-indigo-400" size={48} />}
-          />
-          <StatCard
-            title="Active Smart Accounts"
-            value="1,024"
-            trend="+84 new today"
-            icon={<ShieldCheck className="text-teal-400" />}
-            bgIcon={<ShieldCheck className="text-teal-400" size={48} />}
-          />
-          <StatCard
-            title="Relayer Health"
-            value="99.9%"
-            trend="Operational"
-            icon={<Activity className="text-emerald-400" />}
-            bgIcon={<Activity className="text-emerald-400" size={48} />}
-          />
-        </div>
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <StatCard
+              title="Total Sponsored"
+              value="14,285 XLM"
+              trend="+12% this week"
+              icon={<Zap className="text-indigo-400" />}
+              bgIcon={<Zap className="text-indigo-400" size={48} />}
+            />
+            <StatCard
+              title="Active Smart Accounts"
+              value="1,024"
+              trend="+84 new today"
+              icon={<ShieldCheck className="text-teal-400" />}
+              bgIcon={<ShieldCheck className="text-teal-400" size={48} />}
+            />
+            <StatCard
+              title="Relayer Health"
+              value="99.9%"
+              trend="Operational"
+              icon={<Activity className="text-emerald-400" />}
+              bgIcon={<Activity className="text-emerald-400" size={48} />}
+            />
+          </div>
 
-        {/* Recent Intents Table */}
-        <section className="bg-[#1C1C1E] rounded-3xl border border-white/5 overflow-hidden">
-          <div className="p-6 border-b border-white/5 flex justify-between items-center">
-            <h2 className="font-outfit font-bold text-xl text-white">Recent Intents</h2>
-            <button className="text-sm text-indigo-400 hover:text-indigo-300 transition-colors font-medium">View All</button>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="text-zinc-500 text-sm uppercase tracking-wider">
-                  <th className="px-6 py-4 font-medium">Account</th>
-                  <th className="px-6 py-4 font-medium">Action</th>
-                  <th className="px-6 py-4 font-medium">Status</th>
-                  <th className="px-6 py-4 font-medium">Fee</th>
-                  <th className="px-6 py-4 font-medium text-right">Time</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                <TableRow account="G...4k2" action="Swap USDC/XLM" status="Success" fee="0.01 XLM" time="2m ago" />
-                <TableRow account="G...9m1" action="Stake NEXUS" status="Success" fee="0.05 XLM" time="15m ago" />
-                <TableRow account="G...8v2" action="Mint NFT" status="Processing" fee="0.10 XLM" time="Just now" />
-              </tbody>
-            </table>
-          </div>
-        </section>
+          {/* Recent Intents Table */}
+          <section className="bg-[#1C1C1E] rounded-3xl border border-white/5 overflow-hidden">
+            <div className="p-6 border-b border-white/5 flex justify-between items-center">
+              <h2 className="font-outfit font-bold text-xl text-white">Recent Intents</h2>
+              <button className="text-sm text-indigo-400 hover:text-indigo-300 transition-colors font-medium">View All</button>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="text-zinc-500 text-sm uppercase tracking-wider">
+                    <th className="px-6 py-4 font-medium">Account</th>
+                    <th className="px-6 py-4 font-medium">Action</th>
+                    <th className="px-6 py-4 font-medium">Status</th>
+                    <th className="px-6 py-4 font-medium">Fee</th>
+                    <th className="px-6 py-4 font-medium text-right">Time</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  <TableRow account="G...4k2" action="Swap USDC/XLM" status="Success" fee="0.01 XLM" time="2m ago" />
+                  <TableRow account="G...9m1" action="Stake NEXUS" status="Success" fee="0.05 XLM" time="15m ago" />
+                  <TableRow account="G...8v2" action="Mint NFT" status="Processing" fee="0.10 XLM" time="Just now" />
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </ErrorBoundary>
       </main>
     </div>
   );
